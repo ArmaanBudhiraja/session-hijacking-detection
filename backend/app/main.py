@@ -81,7 +81,28 @@ app.include_router(security.router, prefix="/api")
 app.include_router(sessions.router, prefix="/api")
 app.include_router(demo.router, prefix="/api")
 
+@app.get("/", tags=["Root"])
+def root_index():
+    """
+    Root endpoint providing service metadata and direct navigation links
+    for evaluators visiting http://localhost:8000 directly.
+    """
+    return {
+        "app": settings.APP_NAME,
+        "status": "online",
+        "version": "1.0.0",
+        "documentation": "/api/docs",
+        "redoc": "/api/redoc",
+        "health": "/api/health",
+        "authors": [
+            "Anish Jaiswal (23BCE0172)",
+            "Armaan Budhiraja (23BCE0507)"
+        ],
+        "frontend_url": "http://localhost:5173"
+    }
+
 @app.get("/api/health", tags=["Health"])
+@app.get("/health", tags=["Health"])
 def health_check():
     """Health check endpoint to verify backend operational readiness."""
     return {
