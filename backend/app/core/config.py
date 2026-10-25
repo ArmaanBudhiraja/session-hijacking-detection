@@ -1,9 +1,15 @@
+from pathlib import Path
 from typing import List, Dict
 from pydantic_settings import BaseSettings, SettingsConfigDict
-from pydantic import Field
+
+BACKEND_DIR = Path(__file__).resolve().parent.parent.parent
+ENV_PATH = BACKEND_DIR / ".env"
 
 class Settings(BaseSettings):
-    model_config = SettingsConfigDict(env_file=".env", extra="allow")
+    model_config = SettingsConfigDict(
+        env_file=str(ENV_PATH) if ENV_PATH.exists() else ".env",
+        extra="allow"
+    )
 
     APP_NAME: str = "Behavioral Fingerprint Session Hijacking Detection"
     ENVIRONMENT: str = "development"

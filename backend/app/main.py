@@ -8,12 +8,15 @@ from starlette.exceptions import HTTPException as StarletteHTTPException
 from app.core.config import settings
 from app.db.session import engine, Base
 import app.models  # Ensure all models are registered with Base metadata
+from app.db.seed import seed_default_users
 from app.api.routes import auth, security, sessions, demo
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     # Initialize database tables
     Base.metadata.create_all(bind=engine)
+    # Seed default demonstration accounts
+    seed_default_users()
     yield
 
 app = FastAPI(
